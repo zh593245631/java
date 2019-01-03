@@ -52,6 +52,14 @@ public class Main {
                         line = "对了";
                         socketOut.write(line+"\r\n");
                         socketOut.flush();
+                        String name = socketReader.readLine();
+                        System.out.println(name);
+                        String time = socketReader.readLine();
+                        System.out.println(time);
+                        int time_ = Integer.parseInt(time);
+                        System.out.println(time_);
+                        Rank.addPlayer(name,time_);
+                        //Rank.addPlayer(name,time_);
                         break;
                     }
                     else{
@@ -84,6 +92,8 @@ public class Main {
 
                 //获取键盘的输入流对象
                 //BufferedReader keyReader = new BufferedReader(new InputStreamReader(System.in));
+                //获取到Socket的输出流（字符串数组）
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()); 
                 String input = null;
         do{
                 input = socketReader.readLine();
@@ -91,15 +101,26 @@ public class Main {
                     game(socketOut,socketReader);
                 }
                 if(input.equals("2")){
-                    top10();
+                    top10(out);
                 }   
         }while(!(input.equals("0")));
         //关闭资源
         serverSocket.close();
 }
 
-    private static void top10() {
+    private static void top10(ObjectOutputStream out) throws IOException {
+        String[] rank = Rank.getList();
         
+//        socketOut.write(rank.length);
+//        socketOut.flush();
+//        for(String string:rank){
+//            System.out.println(string);
+//            socketOut.write(rank[i]);
+//            socketOut.flush();
+//        }
+         out.writeObject(rank);
     }
+
+
 
 }
